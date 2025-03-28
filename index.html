@@ -2,19 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Kukucha Interactive Animation</title>
+  <title>Kukucha Interactive Animation (High Quality)</title>
   <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
   <style>
     html, body {
-      height: 500%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
+      height: 100%; margin: 0; padding: 0; overflow: hidden;
+      display: flex; justify-content: center; align-items: center;
       background-color: #ffffff;
     }
-    canvas {
-      width: 100vw;
-      height: 100vh;
+    #riveCanvas {
+      width: 100vw;   /* fills viewport width */
+      height: 100vh;  /* fills viewport height */
       display: block;
     }
   </style>
@@ -23,13 +21,30 @@
   <canvas id="riveCanvas"></canvas>
 
   <script>
+    const canvas = document.getElementById('riveCanvas');
+
+    // Set canvas to high resolution (fix pixelation)
+    function resizeCanvasToHiDPI(canvas) {
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = canvas.clientWidth * ratio;
+      canvas.height = canvas.clientHeight * ratio;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(ratio, ratio);
+    }
+
+    // Initial resize
+    resizeCanvasToHiDPI(canvas);
+
+    // Handle resize (responsive)
+    window.addEventListener('resize', () => resizeCanvasToHiDPI(canvas));
+
     const riveInstance = new rive.Rive({
       src: './kukucha.riv',
-      canvas: document.getElementById('riveCanvas'),
+      canvas: canvas,
       autoplay: true,
-      stateMachines: 'State Machine 1',  // ⚠️ Replace ONLY if your State Machine has a different name
-      onLoad: () => console.log('✅ Kukucha loaded successfully!'),
-      onLoadError: (err) => console.error('❌ Kukucha loading error:', err),
+      stateMachines: 'State Machine 1', // replace if needed
+      onLoad: () => console.log('✅ High-quality Kukucha loaded!'),
+      onLoadError: (err) => console.error('❌ Kukucha load error:', err),
     });
   </script>
 </body>
