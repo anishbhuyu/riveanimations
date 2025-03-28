@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Kukucha Animation (High Quality)</title>
+  <title>Kukucha Animation (Fully Responsive)</title>
   <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
   <style>
     html, body {
@@ -10,15 +10,17 @@
       padding: 0;
       overflow: hidden;
       background-color: #ffffff;
-      height: 100vh;
-      width: 100vw;
+      height: 100%;
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
     }
+
     #riveCanvas {
       width: 100%;
       height: 100%;
+      object-fit: contain; /* Maintains aspect ratio, no cropping */
     }
   </style>
 </head>
@@ -35,19 +37,20 @@
       canvas.height = rect.height * DPR;
     }
 
-    // Resize immediately and also on window resize
-    resizeCanvas();
+    // Resize canvas initially and on window resize
     window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
     const riveInstance = new rive.Rive({
       src: './kukucha.riv',
       canvas: canvas,
       autoplay: true,
-      stateMachines: 'State Machine 1', // Double-check your exact state machine name
-      fit: rive.Fit.cover,  // CRITICAL fix for scaling
+      stateMachines: 'State Machine 1', // Check your exact state machine name!
+      fit: rive.Fit.contain,  // ensures responsiveness without cropping
+      alignment: rive.Alignment.center, // centers the animation
       onLoad: () => {
-        console.log('✅ Kukucha loaded at high quality!');
-        resizeCanvas(); // resize once more after loading
+        console.log('✅ Kukucha fully responsive and crisp!');
+        resizeCanvas(); // final resize for sharpness after load
       },
       onLoadError: (err) => {
         console.error('❌ Kukucha loading error:', err);
