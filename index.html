@@ -2,18 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Kukucha Interactive Animation (High Quality)</title>
+  <title>Kukucha Animation (High Quality)</title>
   <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
   <style>
     html, body {
-      height: 100%; margin: 0; padding: 0; overflow: hidden;
-      display: flex; justify-content: center; align-items: center;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
       background-color: #ffffff;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     #riveCanvas {
-      width: 100vw;   /* fills viewport width */
-      height: 100vh;  /* fills viewport height */
-      display: block;
+      width: 100%;
+      height: 100%;
     }
   </style>
 </head>
@@ -22,29 +27,31 @@
 
   <script>
     const canvas = document.getElementById('riveCanvas');
+    const DPR = window.devicePixelRatio || 1;
 
-    // Set canvas to high resolution (fix pixelation)
-    function resizeCanvasToHiDPI(canvas) {
-      const ratio = window.devicePixelRatio || 1;
-      canvas.width = canvas.clientWidth * ratio;
-      canvas.height = canvas.clientHeight * ratio;
-      const ctx = canvas.getContext('2d');
-      ctx.scale(ratio, ratio);
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * DPR;
+      canvas.height = rect.height * DPR;
     }
 
-    // Initial resize
-    resizeCanvasToHiDPI(canvas);
-
-    // Handle resize (responsive)
-    window.addEventListener('resize', () => resizeCanvasToHiDPI(canvas));
+    // Resize immediately and also on window resize
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
     const riveInstance = new rive.Rive({
       src: './kukucha.riv',
       canvas: canvas,
       autoplay: true,
-      stateMachines: 'State Machine 1', // replace if needed
-      onLoad: () => console.log('✅ High-quality Kukucha loaded!'),
-      onLoadError: (err) => console.error('❌ Kukucha load error:', err),
+      stateMachines: 'State Machine 1', // Double-check your exact state machine name
+      fit: rive.Fit.cover,  // CRITICAL fix for scaling
+      onLoad: () => {
+        console.log('✅ Kukucha loaded at high quality!');
+        resizeCanvas(); // resize once more after loading
+      },
+      onLoadError: (err) => {
+        console.error('❌ Kukucha loading error:', err);
+      },
     });
   </script>
 </body>
