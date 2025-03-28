@@ -1,61 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Kukucha Animation (Fully Responsive)</title>
-  <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #ffffff;
-      height: 100%;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+<script>
+  const canvas = document.getElementById('riveCanvas');
+  const DPR = window.devicePixelRatio || 1;
+
+  function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    let scaleFactor = DPR;
+
+    // Lower scale factor for mobile devices for smoother animation
+    if (window.innerWidth <= 768) {
+      scaleFactor = Math.min(2, DPR); // caps DPR at 2 (most phones)
     }
 
-    #riveCanvas {
-      width: 100%;
-      height: 100%;
-      object-fit: contain; /* Maintains aspect ratio, no cropping */
-    }
-  </style>
-</head>
-<body>
-  <canvas id="riveCanvas"></canvas>
+    canvas.width = rect.width * scaleFactor;
+    canvas.height = rect.height * scaleFactor;
+  }
 
-  <script>
-    const canvas = document.getElementById('riveCanvas');
-    const DPR = window.devicePixelRatio || 1;
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
 
-    function resizeCanvas() {
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * DPR;
-      canvas.height = rect.height * DPR;
-    }
-
-    // Resize canvas initially and on window resize
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    const riveInstance = new rive.Rive({
-      src: './kukucha.riv',
-      canvas: canvas,
-      autoplay: true,
-      stateMachines: 'State Machine 1', // Check your exact state machine name!
-      fit: rive.Fit.contain,  // ensures responsiveness without cropping
-      alignment: rive.Alignment.center, // centers the animation
-      onLoad: () => {
-        console.log('✅ Kukucha fully responsive and crisp!');
-        resizeCanvas(); // final resize for sharpness after load
-      },
-      onLoadError: (err) => {
-        console.error('❌ Kukucha loading error:', err);
-      },
-    });
-  </script>
-</body>
-</html>
+  const riveInstance = new rive.Rive({
+    src: './kukucha.riv',
+    canvas: canvas,
+    autoplay: true,
+    stateMachines: 'State Machine 1', // your exact name
+    fit: rive.Fit.contain,
+    alignment: rive.Alignment.center,
+    onLoad: () => {
+      console.log('✅ Kukucha optimized for mobile!');
+      resizeCanvas();
+    },
+    onLoadError: (err) => {
+      console.error('❌ Kukucha load error:', err);
+    },
+  });
+</script>
