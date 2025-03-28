@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rive Animation</title>
+  <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
+  <style>
+    html, body {
+      height: 100%; margin: 0;
+      display: flex; justify-content: center; align-items: center;
+      background-color: #ffffff;
+    }
+    canvas { width: 100%; max-width: 800px; height: auto; }
+  </style>
+</head>
+<body>
+  <canvas id="riveCanvas"></canvas>
+  <script>
+    new rive.Rive({
+      src: './kukucha.riv', // <-- Replace this with your actual .riv filename
+      canvas: document.getElementById('riveCanvas'),
+      autoplay: true,
+    });
+  </script>
+</body>
+</html>
